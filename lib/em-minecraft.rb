@@ -1,6 +1,7 @@
 $:.unshift(File.dirname(__FILE__) + '/../lib')
 
 require 'eventmachine'
-require 'packets'
-require 'client'
-require 'server'
+require 'em-minecraft/packets'
+require 'em-minecraft/client_packets'
+require 'em-minecraft/server_packets'
+require 'em-minecraft/protocol'
