@@ -31,7 +31,8 @@ module EventMachine
         def self.read_field type, packet, index
           byte_size, code = easy_fields[type]
           if code
-            [packet[index..(index + byte_size)].unpack(code)[0], byte_size]
+            data = packet[index..(index + byte_size)]
+            [data.unpack(code)[0], byte_size] if data
           else
             case type
             when :string8
@@ -55,18 +56,21 @@ module EventMachine
               begin
                 value, bytes_read = read_field(:byte, packet, index); index += bytes_read
                 total_bytes_read += bytes_read
-              end while value != 0x7f
-              ["...", total_bytes_read]
+              end while value != 127
+              ["(#{total_bytes_read} bytes)", total_bytes_read]
             when :inventory_payload
-              count, bytes_read = read_field :short, packet, index; index += bytes_read
-              count.times { 
-                item_id, bytes_read = read_field :short, packet, index; index += bytes_read 
+              start_index = index
+              slot_count, bytes_read = read_field :short, packet, index; index += bytes_read
+              slot_count.times { 
+                item_id, bytes_read = read_field :short, packet, index; index += bytes_read
                 if item_id != -1
-                  count, bytes_read = read_field :byte, packet, index; index += bytes_read
-                  count, bytes_read = read_field :short, packet, index; index += bytes_read
+                  item_count, bytes_read = read_field :byte, packet, index; index += bytes_read
+                  damage, bytes_read = read_field :short, packet, index; index += bytes_read
+                  
+                  puts "item: #{item_id} #{"0x%02X" % item_id} #{item_count} #{damage}"
                 end
               }
-              "..."
+              ["(#{slot_count} slots)", index - start_index]
             else
               raise "Unknown field type #{type}"
             end
