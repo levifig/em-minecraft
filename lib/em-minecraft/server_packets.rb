@@ -23,6 +23,7 @@ module EventMachine
           server 0x00, :keepalive_id => :int
           server 0x01, :entity_id => :int, :unknown => :string, :map_seed => :long, :server_mode => :int, :dimension => :byte, :difficulty => :byte, :world_height => :byte, :max_players => :byte
           server 0x02, :server_id => :string
+          server 0x03, :message => :string
           server 0x04, :time => :long
           server 0x05, :entity_id => :int, :slot => :short, :item_id => :short, :unknown => :short
           server 0x06, :x => :int, :y => :int, :z => :int
@@ -50,7 +51,7 @@ module EventMachine
           server 0x29, :eid => :int, :effect_id => :byte, :amplifier => :byte, :duration => :short
           server 0x2B, :xp => :byte, :level => :byte, :total_xp => :short
           server 0x32, :x => :int, :z => :int, :mode => :bool
-          server 0x33, :x => :int, :y => :short, :z => :int, :size_x => :byte, :size_y => :byte, :size_z => :byte, :compressed_size => :int, :compressed_data => :byte_array
+          server 0x33, :x => :int, :y => :short, :z => :int, :size_x => :byte, :size_y => :byte, :size_z => :byte, :chunk => :chunk
           server 0x34, :chunk_x => :int, :chunk_z => :int, :array_size => :short, :coord_array => :short_array, :type_array => :byte_array, :metadata_array => :byte_array
           server 0x35, :x => :int, :y => :byte, :z => :int, :block_type => :byte, :block_metadata => :byte
           server 0x36, :x => :int, :y => :short, :z => :int, :byte1 => :byte, :byte2 => :byte

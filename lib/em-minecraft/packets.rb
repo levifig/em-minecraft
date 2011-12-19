@@ -76,6 +76,9 @@ module EventMachine
                 end
               }
               ["(#{slot_count} slots)", index - start_index]
+            when :chunk
+              bytes, bytes_read = read_field :int, packet, index; index += bytes_read
+              ["(#{bytes} bytes)", bytes_read + bytes]
             else
               raise "Unknown field type #{type}"
             end
