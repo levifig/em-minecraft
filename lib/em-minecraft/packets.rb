@@ -7,7 +7,7 @@ module EventMachine
         end
     
         def self.easy_fields
-          { byte:[1, "C"], short:[2, "n"], int:[4, "N"], long:[8, "Q"], float:[4, "g"], double:[8, "G"] }
+          { byte:[1, "C"], short:[2, "s>"], int:[4, "N"], long:[8, "Q"], float:[4, "g"], double:[8, "G"] }
         end
 
         def self.pack_field type, value
@@ -16,9 +16,7 @@ module EventMachine
             [value].pack code
           else
             case type
-            when :string8
-              [value.length, value.encode('UTF-8')].pack("na*")
-            when :string16
+            when :string
               [value.length, value.encode('UTF-16BE')].pack("na*")
             when :bool
               [value ? 0 : 1].pack("C")
@@ -31,17 +29,12 @@ module EventMachine
         def self.read_field type, packet, index
           byte_size, code = easy_fields[type]
           if code
-            data = packet[index..(index + byte_size)]
-            [data.unpack(code)[0], byte_size] if data
+            data = packet[index...(index + byte_size)]
+            value = data.unpack(code)[0]
+            [value, byte_size] if data
           else
             case type
-            when :string8
-              str_char_length, bytes_read = read_field :short, packet, index; index += bytes_read
-              str_byte_length = (str_char_length)
-              raw = packet[index..(index + str_byte_length)]
-              value = raw.force_encoding('UTF-8').encode('UTF-8')
-              [value, 2 + str_byte_length]
-            when :string16
+            when :string
               str_char_length, bytes_read = read_field :short, packet, index; index += bytes_read
               str_byte_length = (str_char_length * 2)
               raw = packet[index..(index + str_byte_length - 1)]
@@ -58,16 +51,28 @@ module EventMachine
                 total_bytes_read += bytes_read
               end while value != 127
               ["(#{total_bytes_read} bytes)", total_bytes_read]
-            when :inventory_payload
+            when :slot
+              start_index = index
+              item_id, bytes_read = read_field :short, packet, index; index += bytes_read
+              slot_item = "empty"
+              if item_id != -1
+                item_count, bytes_read = read_field :byte, packet, index; index += bytes_read
+                damage, bytes_read = read_field :short, packet, index; index += bytes_read
+                slot_item = "item: #{item_count} x #{"0x%02X" % item_id} damage:#{damage}"
+              end
+              ["(#{slot_item})", index - start_index]
+            when :slots
               start_index = index
               slot_count, bytes_read = read_field :short, packet, index; index += bytes_read
+              puts "#{slot_count} slots"
               slot_count.times { 
                 item_id, bytes_read = read_field :short, packet, index; index += bytes_read
+                print("0x%02X" % "#{item_id}")
                 if item_id != -1
                   item_count, bytes_read = read_field :byte, packet, index; index += bytes_read
                   damage, bytes_read = read_field :short, packet, index; index += bytes_read
                   
-                  puts "item: #{item_id} #{"0x%02X" % item_id} #{item_count} #{damage}"
+                  puts "item: #{item_count} x #{"0x%02X" % item_id} damage:#{damage}"
                 end
               }
               ["(#{slot_count} slots)", index - start_index]

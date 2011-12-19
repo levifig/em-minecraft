@@ -21,9 +21,9 @@ module EventMachine
           end
 
           client 0x00, :keepalive_id => :int
-          client 0x01, :protocol_version => :int, :username => :string16, 
+          client 0x01, :protocol_version => :int, :username => :string, 
                        :unused1 => :long, :unused2 => :int, :unused3 => :byte, :unused4 => :byte, :unused5 => :byte, :unused6 => :byte
-          client 0x02, :username => :string16
+          client 0x02, :username => :string
           client 0x07, :user => :int, :target => :int, :left_click => :bool
           client 0x09, :world => :byte, :difficulty => :byte, :creative_mode => :byte, :world_height => :short, :map_seed => :long
           client 0x0A, :on_ground => :bool

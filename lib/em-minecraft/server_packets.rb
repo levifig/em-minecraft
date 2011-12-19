@@ -21,8 +21,8 @@ module EventMachine
           end    
 
           server 0x00, :keepalive_id => :int
-          server 0x01, :entity_id => :int, :unknown => :string16, :map_seed => :long, :server_mode => :int, :dimension => :byte, :difficulty => :byte, :world_height => :byte, :max_players => :byte
-          server 0x02, :server_id => :string16
+          server 0x01, :entity_id => :int, :unknown => :string, :map_seed => :long, :server_mode => :int, :dimension => :byte, :difficulty => :byte, :world_height => :byte, :max_players => :byte
+          server 0x02, :server_id => :string
           server 0x04, :time => :long
           server 0x05, :entity_id => :int, :slot => :short, :item_id => :short, :unknown => :short
           server 0x06, :x => :int, :y => :int, :z => :int
@@ -30,12 +30,12 @@ module EventMachine
           server 0x09, :world => :byte, :difficulty => :byte, :creative_mode => :byte, :world_height => :short, :map_seed => :long
           server 0x0D, :x => :double, :stance => :double, :y => :double, :z => :double, :yaw => :float, :pitch => :float, :on_ground => :bool
           server 0x12, :eid => :int, :animate => :byte
-          server 0x14, :eid => :int, :player_name => :string16, :x => :int, :y => :int, :z => :int, :rotation => :byte, :pitch => :byte, :current_item => :short
+          server 0x14, :eid => :int, :player_name => :string, :x => :int, :y => :int, :z => :int, :rotation => :byte, :pitch => :byte, :current_item => :short
           server 0x15, :eid => :int, :item => :short, :count => :byte, :damage => :short, :x => :int, :y => :int, :z => :int, :rotation => :byte, :pitch => :byte, :roll => :byte
           server 0x16, :eid => :int, :eid => :int
           server 0x17, :eid => :int, :type => :byte, :x => :int, :y => :int, :z => :int, :fireball_eid => :int, :unknown1 => :short, :unknown2 => :short, :unknown3 => :short
           server 0x18, :eid => :int, :type => :byte, :x => :int, :y => :int, :z => :int, :yaw => :byte, :pitch => :byte, :data_stream => :metadata
-          server 0x19, :eid => :int, :title => :string16, :x => :int, :y => :int, :z => :int, :direction => :int
+          server 0x19, :eid => :int, :title => :string, :x => :int, :y => :int, :z => :int, :direction => :int
           server 0x1A, :eid => :int, :x => :int, :y => :int, :z => :int, :count => :short
           server 0x1C, :eid => :int, :x => :short, :y => :short, :z => :short
           server 0x1D, :eid => :int
@@ -58,15 +58,15 @@ module EventMachine
           server 0x3D, :effect_id => :int, :x => :int, :y => :byte, :z => :int, :sound_data => :int
           server 0x46, :reason => :byte, :game_mode => :byte
           server 0x47, :eid => :int, :unknown => :bool, :x => :int, :y => :int, :z => :int
-          server 0x64, :window_id => :byte, :type => :byte, :title => :string16, :slots => :byte
+          server 0x64, :window_id => :byte, :type => :byte, :title => :string, :slots => :byte
           server 0x65, :window_id => :byte
-          server 0x67, :window_id => :byte, :slot => :short, :item_id => :short, :item_count => :byte, :item_uses => :short
-          server 0x68, :window_id => :byte, :payload => :inventory_payload
+          server 0x67, :window_id => :byte, :slot_id => :short, :slot => :slot
+          server 0x68, :window_id => :byte, :payload => :slots
           server 0x69, :window_id => :byte, :progress_bar => :short, :value => :short
           server 0x6A, :window_id => :byte, :action_number => :short, :accepted => :bool
-          server 0xC9, :player_name => :string16, :online => :bool, :ping => :short
+          server 0xC9, :player_name => :string, :online => :bool, :ping => :short
 
-          server 0xFF, :reason => :string16
+          server 0xFF, :reason => :string
         end
       end
     end
