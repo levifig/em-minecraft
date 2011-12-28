@@ -30,8 +30,12 @@ module EventMachine
           byte_size, code = easy_fields[type]
           if code
             data = packet[index...(index + byte_size)]
-            value = data.unpack(code)[0]
-            [value, byte_size] if data
+            if data
+              value = data.unpack(code)[0]  
+              [value, byte_size]
+            else
+              [nil, 0]
+            end
           else
             start_index = index
             case type
