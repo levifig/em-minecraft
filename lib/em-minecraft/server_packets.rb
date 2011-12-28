@@ -52,7 +52,7 @@ module EventMachine
           server 0x2B, :xp => :byte, :level => :byte, :total_xp => :short
           server 0x32, :x => :int, :z => :int, :mode => :bool
           server 0x33, :x => :int, :y => :short, :z => :int, :size_x => :byte, :size_y => :byte, :size_z => :byte, :chunk => :chunk
-          server 0x34, :chunk_x => :int, :chunk_z => :int, :array_size => :short, :coord_array => :short_array, :type_array => :byte_array, :metadata_array => :byte_array
+          server 0x34, :chunk_x => :int, :chunk_z => :int, :block_changes => :block_changes
           server 0x35, :x => :int, :y => :byte, :z => :int, :block_type => :byte, :block_metadata => :byte
           server 0x36, :x => :int, :y => :short, :z => :int, :byte1 => :byte, :byte2 => :byte
           server 0x3C, :x => :double, :y => :double, :z => :double, :unknown => :float, :record_count => :int, :x => :byte, :y => :byte, :z => :byte

@@ -33,6 +33,7 @@ module EventMachine
             value = data.unpack(code)[0]
             [value, byte_size] if data
           else
+            start_index = index
             case type
             when :string
               str_char_length, bytes_read = read_field :short, packet, index; index += bytes_read
@@ -52,7 +53,6 @@ module EventMachine
               end while value != 127
               ["(#{total_bytes_read} bytes)", total_bytes_read]
             when :slot
-              start_index = index
               item_id, bytes_read = read_field :short, packet, index; index += bytes_read
               slot_item = "empty"
               if item_id != -1
@@ -62,7 +62,6 @@ module EventMachine
               end
               ["(#{slot_item})", index - start_index]
             when :slots
-              start_index = index
               slot_count, bytes_read = read_field :short, packet, index; index += bytes_read
               puts "#{slot_count} slots"
               slot_count.times { 
@@ -79,6 +78,21 @@ module EventMachine
             when :chunk
               bytes, bytes_read = read_field :int, packet, index; index += bytes_read
               ["(#{bytes} bytes)", bytes_read + bytes]
+            when :block_changes
+              array_size, bytes_read = read_field :short, packet, index; index += bytes_read
+              coords = array_size.times.map do
+                coord, bytes_read = read_field :short, packet, index; index += bytes_read
+                coord
+              end 
+              types = array_size.times.map do
+                type, bytes_read = read_field :byte, packet, index; index += bytes_read
+                type
+              end 
+              metadatas = array_size.times.map do
+                metadata, bytes_read = read_field :byte, packet, index; index += bytes_read
+                metadata
+              end
+              ["(#{array_size} block changes)", index - start_index]
             else
               raise "Unknown field type #{type}"
             end
