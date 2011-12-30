@@ -54,7 +54,7 @@ module EventMachine
               begin
                 value, bytes_read = read_field(:byte, packet, index); index += bytes_read
                 total_bytes_read += bytes_read
-              end while value != 127
+              end while value != 127 && value != nil
               ["(#{total_bytes_read} bytes)", total_bytes_read]
             when :slot
               item_id, bytes_read = read_field :short, packet, index; index += bytes_read
